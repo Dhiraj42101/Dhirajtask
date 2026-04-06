@@ -339,6 +339,5 @@ This solution demonstrates a complete modern data pipeline using AWS serverless 
 
 ## 👤 Author
 
-Amol Shinde
-Cloud & DevOps Engineer
-AWS Certified Solutions Architect | SysOps Administrator
+Dhiraj Bhosale
+Aspiring Data Engineer | Python | SQL | Cloud
