@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<title>Smart Facility Monitoring — Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+        background:#f5f5f0;color:#2c2c2a;padding:24px}
+  h1{font-size:22px;font-weight:600;margin-bottom:4px}
+  .subtitle{font-size:13px;color:#888;margin-bottom:24px}
+  .kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+  .kpi{background:#fff;border-radius:12px;padding:20px;
+        border:1px solid #e5e5e0;text-align:center}
+  .kpi .value{font-size:32px;font-weight:700;color:#185FA5;margin:6px 0}
+  .kpi .label{font-size:12px;color:#888;text-transform:uppercase;letter-spacing:.5px}
+  .kpi .sub{font-size:11px;color:#aaa;margin-top:4px}
+  .charts-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+  .chart-card{background:#fff;border-radius:12px;padding:20px;
+               border:1px solid #e5e5e0}
+  .chart-card.full{grid-column:1/-1}
+  .chart-title{font-size:14px;font-weight:500;margin-bottom:14px;color:#3d3d3a}
+  canvas{max-height:260px}
+  footer{text-align:center;font-size:11px;color:#aaa;margin-top:24px}
+</style>
+</head>
+<body>
+
+<h1>Smart Facility Monitoring</h1>
+<div class="subtitle">Generated: 2026-04-06 16:01 UTC &nbsp;|&nbsp; Last 7 days &nbsp;|&nbsp; All sites</div>
+
+<!-- KPI Cards -->
+<div class="kpi-row">
+  <div class="kpi">
+    <div class="label">Total Events</div>
+    <div class="value">12,000</div>
+    <div class="sub">across 200 devices</div>
+  </div>
+  <div class="kpi">
+    <div class="label">Total Alerts</div>
+    <div class="value" style="color:#E8593C">1,817</div>
+    <div class="sub">15.1% alert rate</div>
+  </div>
+  <div class="kpi">
+    <div class="label">Active Devices</div>
+    <div class="value" style="color:#1D9E75">200</div>
+    <div class="sub">reporting in last 7d</div>
+  </div>
+  <div class="kpi">
+    <div class="label">Alert Rate</div>
+    <div class="value" style="color:#EF9F27">15.1%</div>
+    <div class="sub">events flagged as alert</div>
+  </div>
+</div>
+
+<!-- Charts Row 1 -->
+<div class="charts-grid">
+  <div class="chart-card full">
+    <div class="chart-title">Site-wise Daily Event Trend (top 5 sites)</div>
+    <canvas id="trendChart"></canvas>
+  </div>
+</div>
+
+<!-- Charts Row 2 -->
+<div class="charts-grid">
+  <div class="chart-card">
+    <div class="chart-title">Top 5 Devices by Alert Count</div>
+    <canvas id="topDevChart"></canvas>
+  </div>
+  <div class="chart-card">
+    <div class="chart-title">Alert Type Breakdown</div>
+    <canvas id="alertDonut"></canvas>
+  </div>
+</div>
+
+<!-- Charts Row 3 -->
+<div class="charts-grid">
+  <div class="chart-card">
+    <div class="chart-title">Average Battery Level by Device Type</div>
+    <canvas id="battTypeChart"></canvas>
+  </div>
+  <div class="chart-card">
+    <div class="chart-title">Average Battery Level by Site</div>
+    <canvas id="battSiteChart"></canvas>
+  </div>
+</div>
+
+<footer>Smart Facility Monitoring Dashboard &mdash; Data Engineering Machine Test</footer>
+
+<script>
+const COLORS = ["#4F87D4", "#E8593C", "#1D9E75", "#EF9F27", "#7F77DD"];
+
+// Trend chart
+new Chart(document.getElementById('trendChart'), {
+  type:'line',
+  data:{
+    labels:["2024-01-08", "2024-01-09", "2024-01-10", "2024-01-11", "2024-01-12", "2024-01-13", "2024-01-14"],
+    datasets:[{"label": "Delhi HQ", "data": [146, 156, 151, 146, 143, 163, 150], "borderColor": "#4F87D4", "backgroundColor": "#4F87D422", "tension": 0.3, "fill": false, "pointRadius": 3}, {"label": "Kochi Hub", "data": [180, 149, 140, 131, 143, 148, 154], "borderColor": "#E8593C", "backgroundColor": "#E8593C22", "tension": 0.3, "fill": false, "pointRadius": 3}, {"label": "Chennai Retail", "data": [139, 137, 127, 124, 130, 133, 157], "borderColor": "#1D9E75", "backgroundColor": "#1D9E7522", "tension": 0.3, "fill": false, "pointRadius": 3}, {"label": "Hyderabad Hub", "data": [122, 116, 127, 124, 117, 124, 130], "borderColor": "#EF9F27", "backgroundColor": "#EF9F2722", "tension": 0.3, "fill": false, "pointRadius": 3}, {"label": "Mumbai Central", "data": [124, 111, 106, 128, 131, 121, 137], "borderColor": "#7F77DD", "backgroundColor": "#7F77DD22", "tension": 0.3, "fill": false, "pointRadius": 3}]
+  },
+  options:{responsive:true,interaction:{mode:'index',intersect:false},
+    scales:{y:{beginAtZero:true,title:{display:true,text:'Events'}}},
+    plugins:{legend:{position:'bottom'}}
+  }
+});
+
+// Top devices bar
+new Chart(document.getElementById('topDevChart'), {
+  type:'bar',
+  data:{
+    labels:["DEV_0028 (motion_sensor)", "DEV_0183 (gateway)", "DEV_0096 (motion_sensor)", "DEV_0130 (camera)", "DEV_0060 (camera)"],
+    datasets:[{label:'Alerts',data:[21, 19, 16, 16, 15],
+      backgroundColor:COLORS,borderRadius:6}]
+  },
+  options:{responsive:true,indexAxis:'y',
+    plugins:{legend:{display:false}},
+    scales:{x:{beginAtZero:true}}
+  }
+});
+
+// Alert doughnut
+new Chart(document.getElementById('alertDonut'), {
+  type:'doughnut',
+  data:{
+    labels:["battery_low", "temp_high", "motion_detected", "offline"],
+    datasets:[{data:[474, 471, 464, 408],
+      backgroundColor:COLORS,borderWidth:2,borderColor:'#fff'}]
+  },
+  options:{responsive:true,plugins:{legend:{position:'bottom'}}}
+});
+
+// Battery by device type
+new Chart(document.getElementById('battTypeChart'), {
+  type:'bar',
+  data:{
+    labels:["temperature_sensor", "camera", "motion_sensor", "gateway"],
+    datasets:[{label:'Avg Battery %',data:[52.4, 52.5, 52.8, 53.6],
+      backgroundColor:'#4F87D4',borderRadius:6}]
+  },
+  options:{responsive:true,scales:{y:{min:0,max:100,
+    title:{display:true,text:'Battery %'}}},
+    plugins:{legend:{display:false}}
+  }
+});
+
+// Battery by site
+new Chart(document.getElementById('battSiteChart'), {
+  type:'bar',
+  data:{
+    labels:["Pune Warehouse", "Delhi HQ", "Lucknow Office", "Chennai Retail", "Hyderabad Hub", "Kolkata Store", "Kochi Hub", "Indore Retail", "Bhopal Office", "Jaipur Retail", "Ahmedabad Plant", "Mumbai Central", "Bangalore Tech", "Nagpur Retail", "Surat Warehouse"],
+    datasets:[{label:'Avg Battery %',data:[51.1, 51.8, 51.9, 52.2, 52.5, 52.5, 52.7, 52.8, 52.8, 53.2, 53.2, 53.3, 53.6, 53.8, 54.9],
+      backgroundColor:'#1D9E75',borderRadius:6}]
+  },
+  options:{responsive:true,indexAxis:'y',
+    scales:{x:{min:0,max:100,title:{display:true,text:'Battery %'}}},
+    plugins:{legend:{display:false}}
+  }
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,16 @@
+site_id,site_name,city,region,site_category
+SITE_01,Mumbai Central,Mumbai,West,office
+SITE_02,Pune Warehouse,Pune,West,warehouse
+SITE_03,Delhi HQ,Delhi,North,office
+SITE_04,Chennai Retail,Chennai,South,retail
+SITE_05,Bangalore Tech,Bangalore,South,office
+SITE_06,Kolkata Store,Kolkata,East,retail
+SITE_07,Hyderabad Hub,Hyderabad,South,warehouse
+SITE_08,Ahmedabad Plant,Ahmedabad,West,warehouse
+SITE_09,Jaipur Retail,Jaipur,North,retail
+SITE_10,Lucknow Office,Lucknow,North,office
+SITE_11,Surat Warehouse,Surat,West,warehouse
+SITE_12,Kochi Hub,Kochi,South,warehouse
+SITE_13,Nagpur Retail,Nagpur,West,retail
+SITE_14,Bhopal Office,Bhopal,Central,office
+SITE_15,Indore Retail,Indore,Central,retail
